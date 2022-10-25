@@ -51,7 +51,7 @@ new_model= tf.keras.models.load_model("Number_Reader.model") # Loading the model
 #%%
 
 prediction=new_model.predict([x_test])
-print(prediction) #Printing one-hot encoded arrays of probability distributions
+print(prediction[0]) #Printing arrays where indices are one hot encoded version of classes and values ae probability distribution 
 
 #%%
 
