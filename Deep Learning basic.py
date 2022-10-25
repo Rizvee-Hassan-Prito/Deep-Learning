@@ -34,7 +34,7 @@ model.add(tf.keras.layers.Dense(128, activation= tf.nn.relu)) # 2nd Hidden Layer
 model.add(tf.keras.layers.Dense(10, activation= tf.nn.softmax)) # Output Layer, 10--> number of classes
                                                                 # softmax-->for probability distribution
 model.compile(optimizer='adam' ,loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-                                                    #loss--> for classifying cats or dogs, it would be "binary" 
+                                                    #loss--> for classifying cats or dogs, it would be "binary_crossentropy" 
 model.fit(x_train,y_train, epochs=3)
 
 #%%
