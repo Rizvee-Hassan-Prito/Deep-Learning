@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Keras documentation">
+  <meta name="author" content="Keras Team">
+  <link rel="shortcut icon" href="https://keras.io/img/favicon.ico">
+
+  <!-- Social -->
+  <meta property="og:title" content="Keras documentation: Optimizers">
+  <meta property="og:image" content="https://keras.io/img/logo-k-keras-wb.png">
+  <meta name="twitter:title" content="Keras documentation: Optimizers">
+  <meta name="twitter:image" content="https://keras.io/img/k-keras-social.png">
+  <meta name="twitter:card" content="summary">
+
+  <title>Optimizers</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="/css/docs.css" rel="stylesheet">
+  <link href="/css/monokai.css" rel="stylesheet">
+
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-175165319-128', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+</head>
+
+<body>
+
+  <div class='k-page'>
+  
+    <div class="k-nav" id="nav-menu">
+      <a href='/'><img src='/img/logo-small.png' class='logo-small' /></a>
+      <span class="gh-btn-container">
+        <a class="github-button" href="https://github.com/keras-team/keras" data-size="large" data-show-count="true" aria-label="Star keras-team/keras on GitHub">Star</a>
+      </span>
+      <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+
+        
+          <a class="nav-link" href="/about/" role="tab" aria-selected="">About Keras</a>
+          
+        
+          <a class="nav-link" href="/getting_started/" role="tab" aria-selected="">Getting started</a>
+          
+        
+          <a class="nav-link" href="/guides/" role="tab" aria-selected="">Developer guides</a>
+          
+        
+          <a class="nav-link active" href="/api/" role="tab" aria-selected="">Keras API reference</a>
+          
+            
+              <a class="nav-sublink" href="/api/models/">Models API</a>
+            
+              <a class="nav-sublink" href="/api/layers/">Layers API</a>
+            
+              <a class="nav-sublink" href="/api/callbacks/">Callbacks API</a>
+            
+              <a class="nav-sublink active" href="/api/optimizers/">Optimizers</a>
+            
+              <a class="nav-sublink" href="/api/metrics/">Metrics</a>
+            
+              <a class="nav-sublink" href="/api/losses/">Losses</a>
+            
+              <a class="nav-sublink" href="/api/data_loading/">Data loading</a>
+            
+              <a class="nav-sublink" href="/api/datasets/">Built-in small datasets</a>
+            
+              <a class="nav-sublink" href="/api/applications/">Keras Applications</a>
+            
+              <a class="nav-sublink" href="/api/mixed_precision/">Mixed precision</a>
+            
+              <a class="nav-sublink" href="/api/utils/">Utilities</a>
+            
+              <a class="nav-sublink" href="/api/keras_tuner/">KerasTuner</a>
+            
+              <a class="nav-sublink" href="/api/keras_cv/">KerasCV</a>
+            
+              <a class="nav-sublink" href="/api/keras_nlp/">KerasNLP</a>
+            
+          
+        
+          <a class="nav-link" href="/examples/" role="tab" aria-selected="">Code examples</a>
+          
+        
+          <a class="nav-link" href="/why_keras/" role="tab" aria-selected="">Why choose Keras?</a>
+          
+        
+          <a class="nav-link" href="/governance/" role="tab" aria-selected="">Community & governance</a>
+          
+        
+          <a class="nav-link" href="/contributing/" role="tab" aria-selected="">Contributing to Keras</a>
+          
+        
+          <a class="nav-link" href="/keras_tuner/" role="tab" aria-selected="">KerasTuner</a>
+          
+        
+          <a class="nav-link" href="/keras_cv/" role="tab" aria-selected="">KerasCV</a>
+          
+        
+          <a class="nav-link" href="/keras_nlp/" role="tab" aria-selected="">KerasNLP</a>
+          
+        
+
+      </div>
+
+    </div>
+
+    <div class='k-main'>
+      
+      <div class='k-main-top'>
+        <script>
+          function displayDropdownMenu() {
+            e = document.getElementById("nav-menu");
+            if (e.style.display == "block") {
+              e.style.display = "none";
+            }
+            else {
+              e.style.display = "block";
+              document.getElementById("dropdown-nav").style.display = "block";
+            }
+          }
+
+          function resetMobileUI() {
+            if (window.innerWidth <= 840) {
+              document.getElementById("nav-menu").style.display = "none";
+              document.getElementById("dropdown-nav").style.display = "block";
+            }
+            else {
+              document.getElementById("nav-menu").style.display = "block";
+              document.getElementById("dropdown-nav").style.display = "none";
+            }
+          }
+
+          window.onresize = resetMobileUI;
+        </script>
+        <div id='dropdown-nav' onclick="displayDropdownMenu();">
+          <svg viewBox="-20 -20 120 120" width="60" height="60">
+            <rect width="100" height="20"></rect>
+            <rect y="30" width="100" height="20"></rect>
+            <rect y="60" width="100" height="20"></rect>
+          </svg>
+        </div>
+
+        <form class="bd-search d-flex align-items-center k-search-form" id="search-form">
+          <input type="search" class="k-search-input" id="search-input" placeholder="Search Keras documentation..." aria-label="Search Keras documentation..." autocomplete="off">
+            <button class="k-search-btn">
+              <svg width="13" height="13" viewBox="0 0 13 13"><title>search</title><path d="m4.8495 7.8226c0.82666 0 1.5262-0.29146 2.0985-0.87438 0.57232-0.58292 0.86378-1.2877 0.87438-2.1144 0.010599-0.82666-0.28086-1.5262-0.87438-2.0985-0.59352-0.57232-1.293-0.86378-2.0985-0.87438-0.8055-0.010599-1.5103 0.28086-2.1144 0.87438-0.60414 0.59352-0.8956 1.293-0.87438 2.0985 0.021197 0.8055 0.31266 1.5103 0.87438 2.1144 0.56172 0.60414 1.2665 0.8956 2.1144 0.87438zm4.4695 0.2115 3.681 3.6819-1.259 1.284-3.6817-3.7 0.0019784-0.69479-0.090043-0.098846c-0.87973 0.76087-1.92 1.1413-3.1207 1.1413-1.3553 0-2.5025-0.46363-3.4417-1.3909s-1.4088-2.0686-1.4088-3.4239c0-1.3553 0.4696-2.4966 1.4088-3.4239 0.9392-0.92727 2.0864-1.3969 3.4417-1.4088 1.3553-0.011889 2.4906 0.45771 3.406 1.4088 0.9154 0.95107 1.379 2.0924 1.3909 3.4239 0 1.2126-0.38043 2.2588-1.1413 3.1385l0.098834 0.090049z"></path></svg>
+            </button>
+        </form>
+        <script>
+          var form = document.getElementById('search-form');
+          form.onsubmit = function(e) {
+            e.preventDefault();
+            var query = document.getElementById('search-input').value;
+            window.location.href = '/search.html?query=' + query;
+            return False
+          }
+        </script>
+
+      </div>
+      <div class='k-main-inner'>
+        <div class='k-location-slug'>
+            » 
+                <a href='/api'>Keras API reference</a> /
+               Optimizers
+        </div>
+        <div class='k-content'>
+          <h1 id="optimizers">Optimizers</h1>
+<h2 id="usage-with-compile-amp-fit">Usage with <code>compile()</code> &amp; <code>fit()</code></h2>
+<p>An optimizer is one of the two arguments required for compiling a Keras model:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">tensorflow</span> <span class="kn">import</span> <span class="n">keras</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">kernel_initializer</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;softmax&#39;</span><span class="p">))</span>
+
+<span class="n">opt</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">opt</span><span class="p">)</span>
+</code></pre></div>
+
+<p>You can either instantiate an optimizer before passing it to <code>model.compile()</code> , as in the above example,
+or you can pass it by its string identifier. In the latter case, the default parameters for the optimizer will be used.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># pass optimizer by name: default parameters will be used</span>
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<hr />
+<h2 id="usage-in-a-custom-training-loop">Usage in a custom training loop</h2>
+<p>When writing a custom training loop, you would retrieve
+gradients via a <a href="https://www.tensorflow.org/api_docs/python/tf/GradientTape"><code>tf.GradientTape</code></a> instance,
+then call <code>optimizer.apply_gradients()</code> to update your weights:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Instantiate an optimizer.</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">()</span>
+
+<span class="c1"># Iterate over the batches of a dataset.</span>
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
+    <span class="c1"># Open a GradientTape.</span>
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">GradientTape</span><span class="p">()</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+        <span class="c1"># Forward pass.</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="c1"># Loss value for this batch.</span>
+        <span class="n">loss_value</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">logits</span><span class="p">)</span>
+
+    <span class="c1"># Get gradients of loss wrt the weights.</span>
+    <span class="n">gradients</span> <span class="o">=</span> <span class="n">tape</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">loss_value</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">trainable_weights</span><span class="p">)</span>
+
+    <span class="c1"># Update the weights of the model.</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">apply_gradients</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">gradients</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">trainable_weights</span><span class="p">))</span>
+</code></pre></div>
+
+<p>Note that when you use <code>apply_gradients</code>, the optimizer does not
+apply gradient clipping to the gradients: if you want gradient clipping,
+you would have to do it by hand before calling the method.</p>
+<hr />
+<h2 id="learning-rate-decay--scheduling">Learning rate decay / scheduling</h2>
+<p>You can use a <a href="/api/optimizers/learning_rate_schedules">learning rate schedule</a> to modulate
+how the learning rate of your optimizer changes over time:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">lr_schedule</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">schedules</span><span class="o">.</span><span class="n">ExponentialDecay</span><span class="p">(</span>
+    <span class="n">initial_learning_rate</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span>
+    <span class="n">decay_steps</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+    <span class="n">decay_rate</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="n">lr_schedule</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Check out <a href="/api/optimizers/learning_rate_schedules">the learning rate schedule API documentation</a> for a list of available schedules.</p>
+<hr />
+<h2 id="available-optimizers">Available optimizers</h2>
+<ul>
+<li><a href="/api/optimizers/sgd">SGD</a></li>
+<li><a href="/api/optimizers/rmsprop">RMSprop</a></li>
+<li><a href="/api/optimizers/adam">Adam</a></li>
+<li><a href="/api/optimizers/adadelta">Adadelta</a></li>
+<li><a href="/api/optimizers/adagrad">Adagrad</a></li>
+<li><a href="/api/optimizers/adamax">Adamax</a></li>
+<li><a href="/api/optimizers/Nadam">Nadam</a></li>
+<li><a href="/api/optimizers/ftrl">Ftrl</a></li>
+</ul>
+<hr />
+<h2 id="core-optimizer-api">Core Optimizer API</h2>
+<p>These methods and attributes are common to all Keras optimizers.</p>
+<p><span style="float:right;"><a href="https://github.com/keras-team/keras/tree/v2.10.0//keras/optimizers/optimizer_v2/optimizer_v2.py#L648">[source]</a></span></p>
+<h3 id="applygradients-method"><code>apply_gradients</code> method</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">Optimizer</span><span class="o">.</span><span class="n">apply_gradients</span><span class="p">(</span>
+    <span class="n">grads_and_vars</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">experimental_aggregate_gradients</span><span class="o">=</span><span class="bp">True</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>Apply gradients to variables.</p>
+<p>This is the second part of <code>minimize()</code>. It returns an <code>Operation</code> that
+applies gradients.</p>
+<p>The method sums gradients from all replicas in the presence of
+<a href="https://www.tensorflow.org/api_docs/python/tf/distribute/Strategy"><code>tf.distribute.Strategy</code></a> by default. You can aggregate gradients
+yourself by passing <code>experimental_aggregate_gradients=False</code>.</p>
+<p><strong>Example</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">grads</span> <span class="o">=</span> <span class="n">tape</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="nb">vars</span><span class="p">)</span>
+<span class="n">grads</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">distribute</span><span class="o">.</span><span class="n">get_replica_context</span><span class="p">()</span><span class="o">.</span><span class="n">all_reduce</span><span class="p">(</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">grads</span><span class="p">)</span>
+<span class="c1"># Processing aggregated gradients.</span>
+<span class="n">optimizer</span><span class="o">.</span><span class="n">apply_gradients</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="nb">vars</span><span class="p">),</span>
+    <span class="n">experimental_aggregate_gradients</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>grads_and_vars</strong>: List of (gradient, variable) pairs.</li>
+<li><strong>name</strong>: Optional name for the returned operation. Default to the name
+  passed to the <code>Optimizer</code> constructor.</li>
+<li><strong>experimental_aggregate_gradients</strong>: Whether to sum gradients from
+  different replicas in the presence of <a href="https://www.tensorflow.org/api_docs/python/tf/distribute/Strategy"><code>tf.distribute.Strategy</code></a>. If
+  False, it's user responsibility to aggregate the gradients. Default
+  to True.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p>An <code>Operation</code> that applies the specified gradients. The <code>iterations</code>
+will be automatically increased by 1.</p>
+<p><strong>Raises</strong></p>
+<ul>
+<li><strong>TypeError</strong>: If <code>grads_and_vars</code> is malformed.</li>
+<li><strong>ValueError</strong>: If none of the variables have gradients.</li>
+<li><strong>RuntimeError</strong>: If called in a cross-replica context.</li>
+</ul>
+<hr />
+<h3 id="weights-property"><code>weights</code> property</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Optimizer</span><span class="o">.</span><span class="n">weights</span>
+</code></pre></div>
+
+<p>Returns variables of this Optimizer based on the order created.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/keras-team/keras/tree/v2.10.0//keras/optimizers/optimizer_v2/optimizer_v2.py#L1241">[source]</a></span></p>
+<h3 id="getweights-method"><code>get_weights</code> method</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">Optimizer</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()</span>
+</code></pre></div>
+
+<p>Returns the current weights of the optimizer.</p>
+<p>The weights of an optimizer are its state (ie, variables).
+This function returns the weight values associated with this
+optimizer as a list of Numpy arrays. The first value is always the
+iterations count of the optimizer, followed by the optimizer's state
+variables in the order they were created. The returned list can in turn
+be used to load state into similarly parameterized optimizers.</p>
+<p>For example, the RMSprop optimizer for this simple model returns a list
+of three values-- the iteration count, followed by the root-mean-square
+value of the kernel and bias of the single Dense layer:</p>
+<div class="codehilite"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">opt</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">RMSprop</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">m</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Sequential</span><span class="p">([</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">m</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;mse&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">results</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>  <span class="c1"># Training.</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">get_weights</span><span class="p">())</span>
+<span class="mi">3</span>
+</code></pre></div>
+
+<p><strong>Returns</strong></p>
+<p>Weights values as a list of numpy arrays.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/keras-team/keras/tree/v2.10.0//keras/optimizers/optimizer_v2/optimizer_v2.py#L1271">[source]</a></span></p>
+<h3 id="setweights-method"><code>set_weights</code> method</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">Optimizer</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Set the weights of the optimizer.</p>
+<p>The weights of an optimizer are its state (ie, variables).
+This function takes the weight values associated with this
+optimizer as a list of Numpy arrays. The first value is always the
+iterations count of the optimizer, followed by the optimizer's state
+variables in the order they are created. The passed values are used to
+set the new state of the optimizer.</p>
+<p>For example, the RMSprop optimizer for this simple model takes a list of
+three values-- the iteration count, followed by the root-mean-square
+value of the kernel and bias of the single Dense layer:</p>
+<div class="codehilite"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">opt</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">RMSprop</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">m</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Sequential</span><span class="p">([</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">m</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;mse&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">results</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>  <span class="c1"># Training.</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">new_weights</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">10</span><span class="p">])]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">opt</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="n">new_weights</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">opt</span><span class="o">.</span><span class="n">iterations</span>
+<span class="o">&lt;</span><span class="n">tf</span><span class="o">.</span><span class="n">Variable</span> <span class="s1">&#39;RMSprop/iter:0&#39;</span> <span class="n">shape</span><span class="o">=</span><span class="p">()</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int64</span><span class="p">,</span> <span class="n">numpy</span><span class="o">=</span><span class="mi">10</span><span class="o">&gt;</span>
+</code></pre></div>
+
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>weights</strong>: weight values as a list of numpy arrays.</li>
+</ul>
+<hr />
+        </div>
+        
+        <div class='k-outline'>
+          
+            <div class='k-outline-depth-1'>
+              
+              <a href='#optimizers'>Optimizers</a>
+            </div>
+          
+            <div class='k-outline-depth-2'>
+              ▻
+              <a href='#usage-with-compile-amp-fit'>Usage with <code>compile()</code> & <code>fit()</code></a>
+            </div>
+          
+            <div class='k-outline-depth-2'>
+              ▻
+              <a href='#usage-in-a-custom-training-loop'>Usage in a custom training loop</a>
+            </div>
+          
+            <div class='k-outline-depth-2'>
+              ▻
+              <a href='#learning-rate-decay--scheduling'>Learning rate decay / scheduling</a>
+            </div>
+          
+            <div class='k-outline-depth-2'>
+              ▻
+              <a href='#available-optimizers'>Available optimizers</a>
+            </div>
+          
+            <div class='k-outline-depth-2'>
+              ▻
+              <a href='#core-optimizer-api'>Core Optimizer API</a>
+            </div>
+          
+            <div class='k-outline-depth-3'>
+              
+              <a href='#applygradients-method'><code>apply_gradients</code> method</a>
+            </div>
+          
+            <div class='k-outline-depth-3'>
+              
+              <a href='#weights-property'><code>weights</code> property</a>
+            </div>
+          
+            <div class='k-outline-depth-3'>
+              
+              <a href='#getweights-method'><code>get_weights</code> method</a>
+            </div>
+          
+            <div class='k-outline-depth-3'>
+              
+              <a href='#setweights-method'><code>set_weights</code> method</a>
+            </div>
+          
+        </div>
+        
+      </div>
+    </div>
+
+  </div>
+
+</body>
+
+<footer style="float: left; width: 100%; padding: 1em; border-top: solid 1px #bbb;">
+  <a href="https://policies.google.com/terms">Terms</a> | <a href="https://policies.google.com/privacy">Privacy</a>
+</footer>
+
+</html>
