@@ -26,8 +26,6 @@ print('Label encoded competitors: \n',darts.competitor.head())
 # Import to_categorical from keras utils module
 from tensorflow.keras.utils import to_categorical
 
-coordinates = darts.drop(['competitor'], axis=1)
-
 # Use to_categorical on your labels
 competitors = to_categorical(darts.competitor)
 
