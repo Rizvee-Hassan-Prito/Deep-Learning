@@ -25,7 +25,8 @@ import pandas as pd
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.resnet50 import preprocess_input
 
-img_path='D:\Courses\Deep Learning (Self-learning)\DataCamp\(Codes) Deep Learning with Keras\dog.png'
+#Import the image path
+img_path='...'
 
 # Load the image with the right target size for your model
 img = image.load_img(img_path, target_size=(224, 224))
